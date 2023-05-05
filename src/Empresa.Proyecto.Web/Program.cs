@@ -11,7 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Empresa.Proyecto.Core.Interfaces;
 using Empresa.Proyecto.Core.Entities;
 using Empresa.Proyecto.Infra.Data;
-
+using Empresa.Proyecto.Web.Pages.Catalogos;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,10 +24,17 @@ builder.Services.AddScoped<IAsyncRepository<ComplexEntity>, EFRepository<Complex
 
 //Configuracion de JSON para que no cambie el case al hacer parse, y funcione los controles de Kendo
 builder.Services.AddRazorPages()
-    .AddJsonOptions(options=>
+    .AddJsonOptions(options =>
     options.JsonSerializerOptions.PropertyNamingPolicy = null);
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<MyProjectContext>();
+    await ApplicationDbContextSeed.SeedAsync(dbContext);  // Poblar la base de datos
+}
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -42,11 +49,12 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-// Poruqe no esta configurada la autorizacion :D
-//app.UseAuthentication();
+// Configuración de autenticación
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapRazorPages();
 app.MapControllers();
 
+// Ejecutar la aplicación
 app.Run();

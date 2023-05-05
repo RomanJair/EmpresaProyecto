@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Empresa.Proyecto.Core.Entities;
 
-
 namespace Empresa.Proyecto.Infra.Data
 {
     public class MyProjectContext : DbContext
@@ -15,11 +14,11 @@ namespace Empresa.Proyecto.Infra.Data
 
         }
 
-        public DbSet<SimpleEntity> SimpleEntity => Set<SimpleEntity>();
-        public DbSet<ComplexEntity> ComplexEntity => Set<ComplexEntity>();
+        public DbSet<SimpleEntity> SimpleEntities { get; set; }
+        public DbSet<ComplexEntity> ComplexEntity { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
-        {           
+        {
             builder.ApplyConfigurationsFromAssembly(System.Reflection.Assembly.GetExecutingAssembly());
         }
     }

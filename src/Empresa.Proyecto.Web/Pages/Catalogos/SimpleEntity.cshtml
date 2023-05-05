@@ -13,8 +13,9 @@
 <div>
     <table id="entities" class="display" style="width:100%">
         <thead>
-            <tr>
-                <th>Id</th>
+            <tr> 
+                <!--Para arreglar las columnas; eliminar el th ID para reacomadar las secciones-->
+         @* <th>Id</th>*@
                 <th>Nombre</th>
                 <th>Valor</th>
                 <th>Creado</th>
@@ -35,12 +36,23 @@
                     type: 'POST',
                     headers: { 'RequestVerificationToken': $('@Html.AntiForgeryToken()').val() }
                 },
-                columns:[
-                    { data: 'Name'},
+                columns: [
+                    { data: 'Name' },
                     { data: 'Value' },
-                    { data: 'Created' },
-                    { data: 'Modified'}
+                    {
+                        data: 'Created',
+                        render: function (data) {
+                            return new Date(data).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
+                        }
+                    },
+                    {
+                        data: 'Modified',
+                        render: function (data) {
+                            return new Date(data).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
+                        }
+                    }
                 ]
+
             });
         })
     </script>
